@@ -1,15 +1,15 @@
 # Linux 系统与工具链
 
 ### 1. C++ 编译、构建与工具链
-- **编译与链接原理**
+- **[编译与链接原理](1.%20C++%20编译、构建与工具链/编译与链接原理.md)**
   - 预处理、编译、汇编与 ELF 目标文件结构
   - 静态链接、动态链接、符号解析与重定位
   - 编译器（GCC / Clang）常用选项与优化级别
-- **构建系统与包管理** 
+- **[构建系统与包管理](1.%20C++%20编译、构建与工具链/构建系统与包管理.md)**
   - Make、CMake 与 Ninja 的核心工作流
   - 系统包管理（apt、pkg-config）与 C++ 包管理（conan、vcpkg、Bazel、CPM.cmake、Pixi、XMake、Buck2、Meson）
   - 静态/动态库组织、符号可见性与 ABI 兼容性
-- **交叉编译与工具链**
+- **[交叉编译与工具链](1.%20C++%20编译、构建与工具链/交叉编译与工具链.md)**
   - 工具链组成（Host/Target、sysroot、binutils、glibc/musl）
   - 交叉工具链构建与配置（crosstool-NG、CMake Toolchain File）
   - 跨架构仿真与验证（QEMU）
