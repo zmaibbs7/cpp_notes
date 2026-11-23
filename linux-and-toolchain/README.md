@@ -7,7 +7,7 @@
   - 编译器（GCC / Clang）常用选项与优化级别
 - **[构建系统与包管理](1.%20C++%20编译、构建与工具链/构建系统与包管理.md)**
   - Make、CMake 与 Ninja 的核心工作流
-  - 系统包管理（apt、pkg-config）与 C++ 包管理（conan、vcpkg、Bazel、CPM.cmake、Pixi、XMake、Buck2、Meson）
+  - 系统包管理与依赖查询（apt、pkg-config）；C++ 及跨语言包管理和构建工具（conan、vcpkg、Spack、Bazel(google)、CPM.cmake、NuGet(微软)、Pixi、Xmake、Buck2(Meta)、Meson）
   - 静态/动态库组织、符号可见性与 ABI 兼容性
 - **[交叉编译与工具链](1.%20C++%20编译、构建与工具链/交叉编译与工具链.md)**
   - 工具链组成（Host/Target、sysroot、binutils、glibc/musl）
