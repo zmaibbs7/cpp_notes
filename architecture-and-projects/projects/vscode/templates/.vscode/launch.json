@@ -5,7 +5,7 @@
       "name": "(gdb) Launch C++ / ROS Node",
       "type": "cppdbg",
       "request": "launch",
-      "program": "${workspaceFolder}/devel/lib/<your_package>/<your_node>",
+      "program": "${workspaceFolder}/install/<your_package>/lib/<your_package>/<your_node>",
       "args": [],
       "stopAtEntry": false,
       "cwd": "${workspaceFolder}",
@@ -20,13 +20,13 @@
           "ignoreFailures": true
         }
       ],
-      "preLaunchTask": "catkin_make: build (with compile_commands.json)"
+      "preLaunchTask": "make build"
     },
     {
       "name": "(gdb) Attach to Running ROS Node",
       "type": "cppdbg",
       "request": "attach",
-      "program": "${workspaceFolder}/devel/lib/<your_package>/<your_node>",
+      "program": "${workspaceFolder}/install/<your_package>/lib/<your_package>/<your_node>",
       "processId": "${command:pickProcess}",
       "MIMode": "gdb",
       "miDebuggerPath": "/usr/bin/gdb",

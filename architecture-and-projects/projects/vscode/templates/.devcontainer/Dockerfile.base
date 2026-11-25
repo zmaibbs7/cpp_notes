@@ -1,0 +1,116 @@
+# syntax=docker/dockerfile:1
+
+ARG UBUNTU_VERSION=22.04
+ARG GCC_VERSION=10
+ARG CMAKE_VERSION=3.28.3
+ARG ROS_DISTRO=humble
+
+# ==============================================================================
+# Stage 1: 独立下载并解压对应架构的 CMake（零残留进入最终镜像）
+# ==============================================================================
+FROM ubuntu:${UBUNTU_VERSION} AS cmake-fetcher
+
+ARG CMAKE_VERSION
+ARG TARGETARCH
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+        ca-certificates \
+        curl \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN set -eux; \
+    ARCH="${TARGETARCH:-$(dpkg --print-architecture)}"; \
+    case "${ARCH}" in \
+        amd64) CMAKE_ARCH="x86_64" ;; \
+        arm64) CMAKE_ARCH="aarch64" ;; \
+        *) echo "Unsupported architecture: ${ARCH}" >&2; exit 1 ;; \
+    esac; \
+    mkdir -p /opt/cmake; \
+    curl -fsSL "https://github.com/Kitware/CMake/releases/download/v${CMAKE_VERSION}/cmake-${CMAKE_VERSION}-linux-${CMAKE_ARCH}.tar.gz" \
+        | tar -xz --strip-components=1 -C /opt/cmake; \
+    rm -rf /opt/cmake/doc /opt/cmake/man
+
+# ==============================================================================
+# Stage 2: 精简固定底座（完整保留 include 头文件与动态库，剔除文档与冗余包）
+# ==============================================================================
+FROM ubuntu:${UBUNTU_VERSION}
+
+ARG GCC_VERSION
+ARG ROS_DISTRO
+ARG USERNAME=develop
+ARG USER_UID=1000
+ARG USER_GID=${USER_UID}
+
+ENV DEBIAN_FRONTEND=noninteractive \
+    LANG=C.UTF-8 \
+    LC_ALL=C.UTF-8 \
+    ROS_DISTRO=${ROS_DISTRO}
+
+# 1. 配置 dpkg 跳过 doc/man/info/多余locale（大幅减小体积且绝不误删头文件）
+RUN printf 'path-exclude=/usr/share/doc/*\n\
+path-exclude=/usr/share/man/*\n\
+path-exclude=/usr/share/info/*\n\
+path-exclude=/usr/share/lintian/*\n\
+path-exclude=/usr/share/locale/*\n\
+path-include=/usr/share/locale/en*\n' > /etc/dpkg/dpkg.cfg.d/01_nodoc
+
+# 2. 安装指定版本 GCC、核心构建工具、LSP 与调试工具（去掉冗余的 lldb）
+RUN apt-get update && apt-get install -y --no-install-recommends \
+        ca-certificates \
+        curl \
+        gnupg \
+        lsb-release \
+        sudo \
+        git \
+        openssh-client \
+        bash-completion \
+        gcc-${GCC_VERSION} \
+        g++-${GCC_VERSION} \
+        make \
+        ninja-build \
+        pkg-config \
+        clangd \
+        clang-format \
+        gdb \
+        ccache \
+        vim \
+        tmux \
+        ripgrep \
+        less \
+        tree \
+    && update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-${GCC_VERSION} 100 \
+    && update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-${GCC_VERSION} 100 \
+    && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
+# 3. 安装 ROS 2 Base 与 colcon
+RUN curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key \
+        -o /usr/share/keyrings/ros-archive-keyring.gpg \
+    && echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/ros-archive-keyring.gpg] http://packages.ros.org/ros2/ubuntu $(. /etc/os-release && echo $UBUNTU_CODENAME) main" \
+        > /etc/apt/sources.list.d/ros2.list \
+    && apt-get update && apt-get install -y --no-install-recommends \
+        ros-${ROS_DISTRO}-ros-base \
+        python3-colcon-common-extensions \
+        python3-rosdep \
+    && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
+# 4. 仅拷贝干净的 CMake 产物（避开 /usr/local/man 软链冲突，并剔除 doc/man）
+COPY --from=cmake-fetcher /opt/cmake/bin/ /usr/local/bin/
+COPY --from=cmake-fetcher /opt/cmake/share/ /usr/local/share/
+
+# 5. 创建固定非 root 开发用户并初始化默认环境
+RUN groupadd --gid "${USER_GID}" "${USERNAME}" \
+    && useradd --uid "${USER_UID}" --gid "${USER_GID}" -m -s /bin/bash "${USERNAME}" \
+    && echo "${USERNAME} ALL=(root) NOPASSWD:ALL" > "/etc/sudoers.d/${USERNAME}" \
+    && chmod 0440 "/etc/sudoers.d/${USERNAME}" \
+    && mkdir -p /workspace \
+    && chown -R "${USERNAME}:${USERNAME}" /workspace
+
+USER ${USERNAME}
+WORKDIR /workspace
+
+RUN echo "" >> ~/.bashrc \
+    && echo "# Auto-source ROS 2" >> ~/.bashrc \
+    && echo "source /opt/ros/${ROS_DISTRO}/setup.bash" >> ~/.bashrc \
+    && echo 'export PATH="/usr/lib/ccache:${PATH}"' >> ~/.bashrc
+
+CMD ["/bin/bash"]

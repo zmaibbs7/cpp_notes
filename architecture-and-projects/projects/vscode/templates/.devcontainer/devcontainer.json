@@ -1,8 +1,8 @@
 {
   "name": "robotics-middleware-dev",
   "build": {
-    "dockerfile": "Dockerfile",
-    "context": "."
+    "dockerfile": "Dockerfile.develop",
+    "context": ".."
   },
   "remoteUser": "develop",
   "workspaceFolder": "/workspace",

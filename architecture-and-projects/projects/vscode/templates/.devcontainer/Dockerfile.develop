@@ -1,0 +1,16 @@
+# syntax=docker/dockerfile:1
+
+ARG BASE_IMAGE=robotics-base:humble
+FROM ${BASE_IMAGE}
+
+ARG USERNAME=develop
+
+WORKDIR /workspace
+
+# 拷贝项目源码与配置（务必配合 .dockerignore 排除 .git、build/、install/、log/）
+COPY --chown=${USERNAME}:${USERNAME} . /workspace
+
+# 如需自动加载项目工作区环境变量，可取消注释
+# RUN echo '[ -f /workspace/install/setup.bash ] && source /workspace/install/setup.bash' >> ~/.bashrc
+
+CMD ["/bin/bash"]

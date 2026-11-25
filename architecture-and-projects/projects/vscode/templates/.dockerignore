@@ -1,0 +1,9 @@
+.git
+.gitignore
+build/
+devel/
+install/
+log/
+logs/
+*.bag
+*.db3
