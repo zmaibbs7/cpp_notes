@@ -10,7 +10,7 @@ WORKDIR /workspace
 # 拷贝项目源码与配置（务必配合 .dockerignore 排除 .git、build/、install/、log/）
 COPY --chown=${USERNAME}:${USERNAME} . /workspace
 
-# 如需自动加载项目工作区环境变量，可取消注释
-# RUN echo '[ -f /workspace/install/setup.bash ] && source /workspace/install/setup.bash' >> ~/.bashrc
+# 自动加载项目工作区环境变量（编过即生效，未编译时不报错）
+RUN echo '[ -f /workspace/install/setup.bash ] && source /workspace/install/setup.bash' >> ~/.bashrc
 
 CMD ["/bin/bash"]
