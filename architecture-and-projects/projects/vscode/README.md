@@ -1,5 +1,29 @@
 # VSCode 机器人中台开发指南
 
+## 0. 目录结构与快速上手
+
+- `host/install_host_extensions.sh`：宿主机 VSCode 桥梁插件一键安装脚本。
+- `templates/`：ROS 2 + C++ Dev Container 标准项目模板（内置 `src/example_cpp` 验证工程）。
+
+**首次初始化与验证：**
+1. **初始化宿主机**（确保已安装 VSCode 与 Docker / OrbStack）：
+   ```bash
+   ./host/install_host_extensions.sh
+   ```
+2. **以 Dev Container 模式打开模板工程**：
+   ```bash
+   ./templates/open_devcontainer.sh
+   ```
+3. **容器内编译与测试验证**（在 VSCode 集成终端中执行）：
+   ```bash
+   make build   # 默认 Debug 模式（Ninja + ccache），自动生成 build/compile_commands.json
+   make test    # 运行工作区单元测试并输出汇总
+   ```
+4. **验证节点运行与代码跳转**：
+   - 终端 1 执行 `source install/setup.bash && ros2 run example_cpp talker`
+   - 终端 2 执行 `source install/setup.bash && ros2 run example_cpp listener`
+   - 打开 `src/example_cpp/src/talker.cpp`，按 `F12` 确认 `rclcpp::Node` 跳转正常。
+
 ## 1. 场景定位与核心架构（C++ 机器人中台 + Docker）
 
 - **开发形态痛点**：中台代码仓体积大、跨模块依赖深、构建环境强绑定 Ubuntu/ROS/Docker 容器，且需要避免污染本地电脑环境。

@@ -17,6 +17,7 @@
   },
   "C_Cpp.intelliSenseEngine": "disabled",
   "clangd.arguments": [
+    "--compile-commands-dir=${workspaceFolder}/build",
     "--background-index",
     "--clang-tidy",
     "--completion-style=detailed",
