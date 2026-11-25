@@ -1,0 +1,35 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "catkin_make: build (with compile_commands.json)",
+      "type": "shell",
+      "command": "catkin_make",
+      "args": [
+        "-DCMAKE_BUILD_TYPE=RelWithDebInfo",
+        "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "problemMatcher": [
+        "$gcc"
+      ],
+      "detail": "一键编译 ROS1 工作区并生成供 clangd 索引的 compile_commands.json"
+    },
+    {
+      "label": "catkin_make: clean",
+      "type": "shell",
+      "command": "rm -rf build devel logs",
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": [],
+      "detail": "清理 build / devel / logs 构建产物"
+    }
+  ]
+}

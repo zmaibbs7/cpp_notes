@@ -1,0 +1,42 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "(gdb) Launch C++ / ROS Node",
+      "type": "cppdbg",
+      "request": "launch",
+      "program": "${workspaceFolder}/devel/lib/<your_package>/<your_node>",
+      "args": [],
+      "stopAtEntry": false,
+      "cwd": "${workspaceFolder}",
+      "environment": [],
+      "externalConsole": false,
+      "MIMode": "gdb",
+      "miDebuggerPath": "/usr/bin/gdb",
+      "setupCommands": [
+        {
+          "description": "Enable pretty-printing for gdb",
+          "text": "-enable-pretty-printing",
+          "ignoreFailures": true
+        }
+      ],
+      "preLaunchTask": "catkin_make: build (with compile_commands.json)"
+    },
+    {
+      "name": "(gdb) Attach to Running ROS Node",
+      "type": "cppdbg",
+      "request": "attach",
+      "program": "${workspaceFolder}/devel/lib/<your_package>/<your_node>",
+      "processId": "${command:pickProcess}",
+      "MIMode": "gdb",
+      "miDebuggerPath": "/usr/bin/gdb",
+      "setupCommands": [
+        {
+          "description": "Enable pretty-printing for gdb",
+          "text": "-enable-pretty-printing",
+          "ignoreFailures": true
+        }
+      ]
+    }
+  ]
+}

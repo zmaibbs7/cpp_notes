@@ -1,0 +1,34 @@
+{
+  "files.exclude": {
+    "**/build": true,
+    "**/devel": true,
+    "**/logs": true,
+    "**/install": true,
+    "**/log": true
+  },
+  "search.exclude": {
+    "**/build": true,
+    "**/devel": true,
+    "**/logs": true,
+    "**/install": true,
+    "**/log": true
+  },
+  "C_Cpp.intelliSenseEngine": "disabled",
+  "clangd.arguments": [
+    "--background-index",
+    "--clang-tidy",
+    "--completion-style=detailed",
+    "--header-insertion=iwyu",
+    "-j=4"
+  ],
+  "clangd.fallbackFlags": [
+    "-std=c++17"
+  ],
+  "editor.formatOnSave": true,
+  "[cpp]": {
+    "editor.defaultFormatter": "llvm-vs-code-extensions.vscode-clangd"
+  },
+  "[c]": {
+    "editor.defaultFormatter": "llvm-vs-code-extensions.vscode-clangd"
+  }
+}
