@@ -91,6 +91,7 @@ RUN curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key \
         ros-${ROS_DISTRO}-ros-base \
         python3-colcon-common-extensions \
         python3-rosdep \
+        python-is-python3 \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # 4. 仅拷贝干净的 CMake 产物（避开 /usr/local/man 软链冲突，并剔除 doc/man）

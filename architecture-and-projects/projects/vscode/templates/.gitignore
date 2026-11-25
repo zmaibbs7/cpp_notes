@@ -1,0 +1,6 @@
+.cache/
+build/
+devel/
+install/
+log/
+logs/

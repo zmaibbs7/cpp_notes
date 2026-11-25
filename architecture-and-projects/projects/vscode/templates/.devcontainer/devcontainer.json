@@ -7,7 +7,11 @@
   "remoteUser": "develop",
   "workspaceFolder": "/workspace",
   "workspaceMount": "source=${localWorkspaceFolder},target=/workspace,type=bind,consistency=delegated",
+  "mounts": [
+    "source=${localEnv:HOME}/Project,target=/projects,type=bind,consistency=delegated"
+  ],
   "runArgs": [
+    "--name=midplatform-dev",
     "--cap-add=SYS_PTRACE",
     "--security-opt",
     "seccomp=unconfined"
@@ -22,7 +26,8 @@
         "ms-vscode.cpptools",
         "ms-vscode.cmake-tools",
         "ms-vscode.makefile-tools",
-        "ms-iot.vscode-ros",
+        "ms-python.python",
+        "Ranch-Hand-Robotics.rde-ros-2",
         "redhat.vscode-yaml",
         "redhat.vscode-xml",
         "eamodio.gitlens",

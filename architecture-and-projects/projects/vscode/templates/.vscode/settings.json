@@ -1,5 +1,6 @@
 {
   "files.exclude": {
+    "**/.cache": true,
     "**/build": true,
     "**/devel": true,
     "**/logs": true,
@@ -7,6 +8,7 @@
     "**/log": true
   },
   "search.exclude": {
+    "**/.cache": true,
     "**/build": true,
     "**/devel": true,
     "**/logs": true,
@@ -30,5 +32,15 @@
   },
   "[c]": {
     "editor.defaultFormatter": "llvm-vs-code-extensions.vscode-clangd"
-  }
+  },
+  "cmake.sourceDirectory": "/workspace/example_cpp",
+  "ROS2.distro": "humble",
+  "python.autoComplete.extraPaths": [
+    "/opt/ros/humble/lib/python3.10/site-packages",
+    "/opt/ros/humble/local/lib/python3.10/dist-packages"
+  ],
+  "python.analysis.extraPaths": [
+    "/opt/ros/humble/lib/python3.10/site-packages",
+    "/opt/ros/humble/local/lib/python3.10/dist-packages"
+  ]
 }
