@@ -8,3 +8,8 @@
 - 具体项目的架构设计、性能分析及工程实践。
 
 项目涉及的 C++ 语言和 Linux 通用原理，可关联到另外两个目录。
+
+## 工程效率与工具实践
+
+- [VSCode 机器人中台开发指南](projects/vscode/README.md)：DevContainer 分层镜像、插件体系与快捷键速查。
+- [CLI 工具速查手册](projects/CLI_tools/README.md)：Git、Oh My Zsh、tldr / tealdeer 定位、常用命令与常见流程。
