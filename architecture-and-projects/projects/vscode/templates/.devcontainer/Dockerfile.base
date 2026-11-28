@@ -54,10 +54,11 @@ path-exclude=/usr/share/lintian/*\n\
 path-exclude=/usr/share/locale/*\n\
 path-include=/usr/share/locale/en*\n' > /etc/dpkg/dpkg.cfg.d/01_nodoc
 
-# 2. 安装指定版本 GCC、核心构建工具、LSP 与调试工具（去掉冗余的 lldb）
+# 2. 安装指定版本 GCC、核心构建工具、LSP、调试工具及常用 Linux 排障工具（去掉冗余的 lldb）
 RUN apt-get update && apt-get install -y --no-install-recommends \
         ca-certificates \
         curl \
+        wget \
         gnupg \
         lsb-release \
         sudo \
@@ -78,6 +79,20 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         ripgrep \
         less \
         tree \
+        procps \
+        htop \
+        psmisc \
+        lsof \
+        strace \
+        file \
+        iproute2 \
+        iputils-ping \
+        dnsutils \
+        netcat-openbsd \
+        rsync \
+        zip \
+        unzip \
+        jq \
     && update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-${GCC_VERSION} 100 \
     && update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-${GCC_VERSION} 100 \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*

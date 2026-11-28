@@ -5,6 +5,21 @@ FROM ${BASE_IMAGE}
 
 ARG USERNAME=develop
 
+USER root
+
+# 安装项目级代码质检门禁与测试/基准依赖（置于源码 COPY 前以充分利用 Docker 缓存）
+RUN apt-get update && apt-get install -y --no-install-recommends \
+        clang-tidy \
+        doxygen \
+        python3-pip \
+        libgtest-dev \
+        libbenchmark-dev \
+    && pip3 install --no-cache-dir \
+        pre-commit \
+        gitlint \
+    && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
+USER ${USERNAME}
 WORKDIR /workspace
 
 # 拷贝项目源码与配置（务必配合 .dockerignore 排除 .git、build/、install/、log/）

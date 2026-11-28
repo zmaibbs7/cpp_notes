@@ -59,7 +59,8 @@
 | :--- | :--- | :--- |
 | **本机（宿主机）**<br>基础软件 | • VSCode 本体<br>• Docker（macOS 推荐 OrbStack）<br>• Git（管理本地 SSH Key 与初始拉仓） | 研发人员自行安装，**严禁**在本机折腾 ROS / C++ 编译器 |
 | **本机 VSCode**<br>必装插件（仅 3 个） | • `Dev Containers`<br>• `Remote - SSH`<br>• `Docker` | 连接容器的“桥梁”插件；其余主题、字体、快捷键等个人偏好插件按需装在本机 |
-| **Dockerfile**<br>（镜像内系统与工具链） | • **用户与权限**：Ubuntu 基础镜像、非 root 的 `develop` 用户<br>• **编译构建**：`gcc/g++`、`cmake`、`ninja`、`colcon`、`ccache`<br>• **调试与语言服务底座**：`clangd`、`clang-format`、`gdb/lldb`<br>• **中台与机器人依赖**：ROS 基础环境、C++ 第三方库（Eigen/Protobuf 等）<br>• **CLI 提效工具**：`git`、`vim`、`tmux`、`ripgrep`（加速全局搜索） | 团队统一维护并推送到私有镜像仓库，新人直接拉取，零手动配置 |
+| **`Dockerfile.base`**<br>（通用基础镜像底座） | • **用户与权限**：Ubuntu 基础镜像、非 root 的 `develop` 用户<br>• **编译与调试**：`gcc/g++`、`cmake`、`ninja`、`colcon`、`ccache`、`clangd`、`clang-format`、`gdb`<br>• **机器人底座**：ROS 2 Base 环境<br>• **通用 Linux 与排障 CLI**：`git`、`vim`、`tmux`、`ripgrep`、`tree`、`procps` (`ps`/`top`)、`htop`、`psmisc`、`lsof`、`strace`、`file`、`iproute2`、`ping`、`dnsutils`、`nc`、`wget`、`rsync`、`zip/unzip`、`jq` | 稳定底座，低频变更，团队统一维护并推送至私有镜像仓库 |
+| **`Dockerfile.develop`**<br>（项目级研发与质检层） | • **代码质量门禁**：`clang-tidy`、`doxygen`、`pre-commit`、`gitlint`<br>• **测试与基准库**：`libgtest-dev`（GoogleTest）、`libbenchmark-dev`（Google Benchmark）<br>• **项目源码与环境**：拷贝工作区并自动 source `install/setup.bash` | 继承 `base` 镜像，按项目/中台规范快速迭代重建，开箱满足 `make check` / `pre-commit` 全检 |
 | **`.devcontainer/devcontainer.json`**<br>（容器内自动安装的 VSCode 插件） | • **C++ 与构建**：`clangd` 插件、`CMake Tools`、`Makefile Tools`<br>• **机器人与配置**：`ROS`、`URDF`、`YAML`、`XML`<br>• **协作与效率**：`GitLens`、`Git Graph`、`Error Lens`、`Todo Tree`<br>• **AI 辅助**：`4copy`、团队合规 AI 插件（如 `Continue` / `Copilot`） | 随 Git 仓库分发；首次进入容器时由 VSCode 自动安装，**无需在 Dockerfile 里手动安装插件** |
 
 ## 3. 常用插件体系（按核心场景分类）
